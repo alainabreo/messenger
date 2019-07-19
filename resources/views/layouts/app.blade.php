@@ -9,9 +9,6 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -20,8 +17,11 @@
 
 </head>
 <body>
-    <div id="app">
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
 
+    <div id="app">
         <b-navbar toggleable="sm" type="dark" variant="primary">
             <b-navbar-toggle target="nav-text-collapse"></b-navbar-toggle>
 
@@ -36,9 +36,10 @@
                         <b-nav-item href="{{ route('register') }}">{{ __('Register') }}</b-nav-item>
                     @else
                         <!-- Navbar dropdowns -->
-                        <b-nav-item-dropdown text="User" right>
-                            <b-dropdown-item href="#">Account</b-dropdown-item>
-                            <b-dropdown-item href="#">Settings</b-dropdown-item>
+                        <b-nav-item-dropdown text="{{ Auth::user()->name }}" right>
+                            <b-dropdown-item href="#" @click="logout">
+                                {{ __('Logout') }}
+                            </b-dropdown-item>
                         </b-nav-item-dropdown>
                     @endguest
                 </b-navbar-nav>
@@ -49,5 +50,8 @@
             @yield('content')
         </main>
     </div>
+
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>
