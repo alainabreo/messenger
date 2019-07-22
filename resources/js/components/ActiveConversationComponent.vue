@@ -9,32 +9,28 @@
 
                 <b-card-text>Header and footers variants.</b-card-text>
 
-                <b-media vertical-align="center" class="mb-2">
-                <b-img rounded="circle" slot="aside" blank blank-color="#ccc" width="48" alt="placeholder"></b-img>
-                <b-card>
-                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin.
-                    Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.
-                </b-card>
-                </b-media>
-                          
-                <b-media right-align vertical-align="center" class="mb-2">
-                <b-img rounded="circle" slot="aside" blank blank-color="#ccc" width="48" alt="placeholder"></b-img>
-                <b-card no-body>
-                    Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
-                </b-card>
-                </b-media>
+                <message-conversation-component 
+                        v-for="message in messages"
+                        :key="message.id"
+                        :written-by-me="message.written_by_me">
+                        {{ message.content }}
+                </message-conversation-component>
 
                 <div slot="footer">
-                    <b-form class="mb-0">
+                    <b-form class="mb-0" @submit.prevent="postMessage" autocomplete="off">
+
                         <b-input-group>
-                            <b-form-input 
+                            <b-form-input class="text-center"
                                 type="text"
+                                v-model="newMessage"
                                 placeholder="Send message ...">
                             </b-form-input>
+
                             <b-input-group-append>
-                                <b-button variant="primary">Enviar</b-button>
+                                <b-button type="submit" variant="primary">Enviar</b-button>
                             </b-input-group-append>
                         </b-input-group>
+
                     </b-form>
                 </div>
             </b-card>            
@@ -54,10 +50,35 @@
     export default {
         data () {
             return {
+                messages: [],
+                newMessage: ''
             };
         },
         mounted() {
-            console.log('Active Conversation Component mounted.')
+            console.log('Active Conversation Component mounted.');
+            this.getMessages();
+        },
+        methods: {
+            getMessages() {
+                axios.get('/api/messages').then((response) => {
+                    this.messages = response.data;
+                    //console.log(response.data);
+                });
+            },
+            postMessage() {
+                const params = {
+                    to_id: 2,
+                    //content: 'querty'
+                    content: this.newMessage
+                };
+                axios.post('/api/messages', params).then((response) => {
+                    if (response.data.success) {
+                        //console.log(response.data);
+                        this.newMessage = '';
+                        this.getMessages();
+                    }
+                });
+            }
         }
     }
 </script>
