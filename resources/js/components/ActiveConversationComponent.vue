@@ -51,7 +51,8 @@
         data () {
             return {
                 messages: [],
-                newMessage: ''
+                newMessage: '',
+                contactId: 2
             };
         },
         mounted() {
@@ -60,14 +61,14 @@
         },
         methods: {
             getMessages() {
-                axios.get('/api/messages').then((response) => {
+                axios.get(`/api/messages?contact_id=${this.contactId}`).then((response) => {
                     this.messages = response.data;
                     //console.log(response.data);
                 });
             },
             postMessage() {
                 const params = {
-                    to_id: 2,
+                    to_id: this.contactId,
                     //content: 'querty'
                     content: this.newMessage
                 };

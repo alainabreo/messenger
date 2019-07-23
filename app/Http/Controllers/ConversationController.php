@@ -12,6 +12,15 @@ class ConversationController extends Controller
     {
     	//return Conversation::all();
     	//return Conversation::where('user_id', auth()->id)->get();
-    	return Conversation::where('user_id', auth()->user()->id)->get();
+    	return Conversation::where('user_id', auth()->user()->id)
+    			->get([
+    				'id',
+    				'contact_id',
+    				'has_blocked',
+    				'listen_notifications',
+    				'last_message',
+    				'last_time'
+    			]);
+    			// contact_name viaja en json desde el modelo Conversation
     }
 }
