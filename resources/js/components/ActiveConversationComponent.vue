@@ -39,6 +39,8 @@
             <b-img rounded="circle" blank width="60" height="60" blank-color="#777" alt="img" class="m-1"></b-img>
             <p>Usuario seleccionado</p>
             <hr>
+            <p>{{ contactName }}</p>
+            <hr>
             <b-form-checkbox>
                 Desactivar notificaciones
             </b-form-checkbox>
@@ -48,11 +50,14 @@
 
 <script>
     export default {
+        props: {
+            contactId: Number,
+            contactName: String
+        },
         data () {
             return {
                 messages: [],
-                newMessage: '',
-                contactId: 2
+                newMessage: ''
             };
         },
         mounted() {
@@ -79,6 +84,16 @@
                         this.getMessages();
                     }
                 });
+            }
+        },
+        watch: {
+            //Vigila si la var contactId cambia su valor
+            contactId(value) {
+                console.log('Valor de contactId: ', value);
+                this.getMessages();
+            },
+            contactName(value) {
+                console.log('Valor de contactName: ', value);
             }
         }
     }

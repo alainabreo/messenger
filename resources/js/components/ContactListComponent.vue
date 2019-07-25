@@ -11,7 +11,8 @@
             <contact-component 
                 v-for="conversation in conversations"
                 :key="conversation.id"
-                :conversation="conversation">
+                :conversation="conversation"
+                @click.native="selectConversation(conversation)">
             </contact-component>
 
             <!-- <contact-component variant="dark">
@@ -41,6 +42,12 @@
                     this.conversations = response.data;
                     console.log(response.data);
                 });
+            },
+            selectConversation(conversation) {
+                //console.log('selectConversation fired');
+                //console.log(conversation);
+                //Emite este método para que lo detecte el componente padre
+                this.$emit('conversationSelected', conversation);
             }
         }
     }
