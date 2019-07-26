@@ -1,20 +1,22 @@
 <template>
     <b-row class="h-100">
         <b-col cols="8" class="h-100">
-            <b-card
+            <b-card no-body
                 footer-bg-variant="light"
                 footer-border-variant="dark"
                 title="Conversación activa"
                 class="h-100">
 
-                <b-card-text>Header and footers variants.</b-card-text>
+                <b-card-text class="text-center">Conversación activa</b-card-text>
 
-                <message-conversation-component 
-                        v-for="message in messages"
-                        :key="message.id"
-                        :written-by-me="message.written_by_me">
-                        {{ message.content }}
-                </message-conversation-component>
+                <b-card-body class="card-body-scroll">
+                    <message-conversation-component 
+                            v-for="message in messages"
+                            :key="message.id"
+                            :written-by-me="message.written_by_me">
+                            {{ message.content }}
+                    </message-conversation-component>
+                </b-card-body>
 
                 <div slot="footer">
                     <b-form class="mb-0" @submit.prevent="postMessage" autocomplete="off">
@@ -48,53 +50,66 @@
     </b-row>
 </template>
 
+<style>
+    /*Menos el alto del Footer*/
+    .card-body-scroll {
+        max-height: calc(100vh - 63px);
+        overflow-y: auto;
+    }
+</style>
+
 <script>
     export default {
         props: {
             contactId: Number,
-            contactName: String
+            contactName: String,
+            messages: Array
         },
         data () {
             return {
-                messages: [],
                 newMessage: ''
             };
         },
         mounted() {
             console.log('Active Conversation Component mounted.');
-            this.getMessages();
         },
         methods: {
-            getMessages() {
-                axios.get(`/api/messages?contact_id=${this.contactId}`).then((response) => {
-                    this.messages = response.data;
-                    //console.log(response.data);
-                });
-            },
             postMessage() {
                 const params = {
                     to_id: this.contactId,
                     //content: 'querty'
                     content: this.newMessage
                 };
+
+                if (!this.contactId) {
+                    console.log("no hay conversacion activa")
+                    return;
+                }
+
+                if (!this.newMessage) {
+                    console.log("no hay mensaje para grabar")
+                    return;
+                }
+
                 axios.post('/api/messages', params).then((response) => {
                     if (response.data.success) {
                         //console.log(response.data);
                         this.newMessage = '';
-                        this.getMessages();
+
+                        const message = response.data.message;
+                        message.written_by_me = true;
+                        this.$emit('messageCreated', message);
                     }
                 });
+            },
+            scrollToBottom() {
+                const el = document.querySelector('.card-body-scroll');
+                el.scrollTop = el.scrollHeight;
             }
         },
-        watch: {
-            //Vigila si la var contactId cambia su valor
-            contactId(value) {
-                console.log('Valor de contactId: ', value);
-                this.getMessages();
-            },
-            contactName(value) {
-                console.log('Valor de contactName: ', value);
-            }
+        updated() {
+            this.scrollToBottom();
+            console.log('messages ha cambiado');
         }
     }
 </script>
