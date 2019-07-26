@@ -2042,7 +2042,7 @@ __webpack_require__.r(__webpack_exports__);
     this.getConversations(); //Echo.channel('example')
     //User se suscribe a su propio canal
 
-    Echo.channel("users.".concat(this.userId)).listen('MessageSent', function (data) {
+    Echo["private"]("users.".concat(this.userId)).listen('MessageSent', function (data) {
       console.log('Message received from Pusher.');
       console.log(data.message);
       var message = data.message;

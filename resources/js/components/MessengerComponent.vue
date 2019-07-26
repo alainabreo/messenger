@@ -43,7 +43,7 @@
 
             //Echo.channel('example')
             //User se suscribe a su propio canal
-            Echo.channel(`users.${this.userId}`)
+            Echo.private(`users.${this.userId}`)
                 .listen('MessageSent', (data) => {
                     console.log('Message received from Pusher.')
                     console.log(data.message);

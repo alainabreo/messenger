@@ -35,6 +35,6 @@ class MessageSent implements ShouldBroadcast
     {
         //return new Channel('example');
         //Se suscribe al canal del usuario que recibe el mensaje
-        return new Channel('users.' . $this->message->to_id);
+        return new PrivateChannel('users.' . $this->message->to_id);
     }
 }
