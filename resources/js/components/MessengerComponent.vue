@@ -52,6 +52,21 @@
                     message.written_by_me = false;                    
                     this.addMessage(message);
                 });
+
+            //User se suscribe al Canal general
+            Echo.join('messenger')
+                .here((users) => {
+                    console.log('online: ', users);
+                    users.forEach((user) => this.changeStatus(user, true));
+                })
+                .joining((user) => {                    
+                    console.log('User joining: ', user.name);
+                    this.changeStatus(user, true);
+                })
+                .leaving((user) => {
+                    console.log('User leaving: ', user.name);
+                    this.changeStatus(user, false);
+                });                
         },
         methods: {
             getConversations() {
@@ -90,6 +105,14 @@
                     //message.written_by_me = (this.userId == message.from_id);
                     this.messages.push(message);
                 }
+            },
+            changeStatus(user, status) {
+                const index = this.conversations.findIndex((conversation) => {
+                    return conversation.contact_id == user.id;
+                });
+                //Añade una propiedad reactiva online
+                if (index >= 0)
+                    this.$set(this.conversations[index], 'online', status);
             }
         }
     }

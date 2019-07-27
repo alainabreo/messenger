@@ -9,6 +9,7 @@ import BootstrapVue from 'bootstrap-vue'
 Vue.use(BootstrapVue)
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('status-component', require('./components/StatusComponent.vue').default);
 Vue.component('messenger-component', require('./components/MessengerComponent.vue').default);
 Vue.component('message-conversation-component', require('./components/MessageConversationComponent.vue').default);
 Vue.component('contact-component', require('./components/ContactComponent.vue').default);
