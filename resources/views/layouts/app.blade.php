@@ -25,7 +25,7 @@
         <b-navbar toggleable="sm" type="dark" variant="primary">
             <b-navbar-toggle target="nav-text-collapse"></b-navbar-toggle>
 
-            <b-navbar-brand href="{{ url('/') }}">
+            <b-navbar-brand href="{{ url('/home') }}">
                 {{ config('app.name', 'Laravel') }}
             </b-navbar-brand>
 
@@ -37,6 +37,9 @@
                     @else
                         <!-- Navbar dropdowns -->
                         <b-nav-item-dropdown text="{{ Auth::user()->name }}" right>
+                            <b-dropdown-item href="{{ url('/profile') }}">
+                                {{ __('Profile') }}
+                            </b-dropdown-item>
                             <b-dropdown-item href="#" @click="logout">
                                 {{ __('Logout') }}
                             </b-dropdown-item>
@@ -51,7 +54,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ mix('js/app.js') }}"></script>
     @yield('scripts')
 </body>
 </html>

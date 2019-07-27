@@ -2,11 +2,19 @@
     <b-container fluid style="height: calc(100vh - 56px);">
         <b-row no-gutters class="h-100">
             <b-col cols="4">
+
+                <b-form class="my-3 mx-2">
+                    <b-form-input class="text-center" 
+                        type="text"
+                        v-model="querySearch"
+                        placeholder="Search contact">
+                    </b-form-input>                        
+                </b-form>
+
                 <!-- //$event captura la data que viene del componente -->
                 <contact-list-component 
                     @conversationSelected="changeActiveConversation($event)"
-                    :conversations="conversations">
-                    
+                    :conversations="conversationsFiltered">                    
                 </contact-list-component>
             </b-col>
             <b-col cols="8">
@@ -14,6 +22,8 @@
                     v-if="selectedConversation"
                     :contact-id="selectedConversation.contact_id"
                     :contact-name="selectedConversation.contact_name"
+                    :contact-image="selectedConversation.contact_image"
+                    :my-image="myImageUrl"
                     :messages="messages"
                     @messageCreated="addMessage($event)">
                     
@@ -26,14 +36,15 @@
 <script>
     export default {
         props: {
-            userId: Number
+            user: Object
         },
         data () {
             return {
                 //selectedConversation: null
                 selectedConversation: [],
                 messages: [],
-                conversations: []
+                conversations: [],
+                querySearch: ''
             };
         },
         mounted() {
@@ -43,7 +54,7 @@
 
             //Echo.channel('example')
             //User se suscribe a su propio canal
-            Echo.private(`users.${this.userId}`)
+            Echo.private(`users.${this.user.id}`)
                 .listen('MessageSent', (data) => {
                     console.log('Message received from Pusher.')
                     console.log(data.message);
@@ -95,14 +106,14 @@
                         || conversation.contact_id == message.to_id
                 });
 
-                const autor = this.userId === message.from_id ? 'Tú' : conversation.contact_name;
+                const autor = this.user.id === message.from_id ? 'Tú' : conversation.contact_name;
                 
                 conversation.last_message = `${autor}: ${message.content}`;
                 conversation.last_time = message.created_at;
 
                 if (this.selectedConversation.contact_id == message.from_id 
                     || this.selectedConversation.contact_id == message.to_id) {
-                    //message.written_by_me = (this.userId == message.from_id);
+                    //message.written_by_me = (this.user.id == message.from_id);
                     this.messages.push(message);
                 }
             },
@@ -113,6 +124,21 @@
                 //Añade una propiedad reactiva online
                 if (index >= 0)
                     this.$set(this.conversations[index], 'online', status);
+            }
+        },
+        computed: {
+            conversationsFiltered() {
+                console.log('Lista de conversaciones');
+                //console.log(this.conversations);
+                //return this.conversations;
+                return this.conversations.filter(
+                    (conversation) => conversation.contact_name
+                                .toLowerCase()
+                                .includes(this.querySearch.toLowerCase())
+                );
+            },
+            myImageUrl() {
+                return `/users/${this.user.image}`;
             }
         }
     }

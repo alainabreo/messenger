@@ -1,7 +1,7 @@
 <template>
 
 <b-media :right-align="writtenByMe" vertical-align="center" class="mb-2">
-    <b-img rounded="circle" slot="aside" blank blank-color="#ccc" width="48" alt="placeholder"></b-img>
+    <b-img :src="image" rounded="circle" slot="aside" width="48" height="48" ></b-img>
     <!-- no-body reduce el ancho del mensaje -->
     <!-- <b-card no-body> -->
     <b-card>
@@ -15,6 +15,7 @@
 <script>
     export default {
         props: {
+            image: String,
             writtenByMe: Boolean
         },
         data () {

@@ -7,13 +7,14 @@
                 title="Conversación activa"
                 class="h-100">
 
-                <b-card-text class="text-center">Conversación activa</b-card-text>
+                <!-- <b-card-text class="text-center">Conversación activa</b-card-text> -->
 
                 <b-card-body class="card-body-scroll">
                     <message-conversation-component 
                             v-for="message in messages"
                             :key="message.id"
-                            :written-by-me="message.written_by_me">
+                            :written-by-me="message.written_by_me"
+                            :image="message.written_by_me ? myImage : contactImage">
                             {{ message.content }}
                     </message-conversation-component>
                 </b-card-body>
@@ -38,9 +39,7 @@
             </b-card>            
         </b-col>
         <b-col cols="4" class="h-100">
-            <b-img rounded="circle" blank width="60" height="60" blank-color="#777" alt="img" class="m-1"></b-img>
-            <p>Usuario seleccionado</p>
-            <hr>
+            <b-img :src="contactImage" rounded="circle" width="48" height="48" class="m-1"></b-img>
             <p>{{ contactName }}</p>
             <hr>
             <b-form-checkbox>
@@ -63,6 +62,8 @@
         props: {
             contactId: Number,
             contactName: String,
+            contactImage: String,
+            myImage: String,
             messages: Array
         },
         data () {

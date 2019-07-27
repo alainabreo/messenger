@@ -22,5 +22,6 @@ class ConversationController extends Controller
     				'last_time'
     			]);
     			// contact_name viaja en json desde el modelo Conversation
+                // contact_image
     }
 }
