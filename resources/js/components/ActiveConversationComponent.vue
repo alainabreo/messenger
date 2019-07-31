@@ -73,6 +73,11 @@
         },
         mounted() {
             console.log('Active Conversation Component mounted.');
+
+            //EventBus example, escuchar evento y recibir data
+            eventBus.$on('example', function (data) {
+                console.log('ocurrió el evento example: ', data);
+            });
         },
         methods: {
             postMessage() {

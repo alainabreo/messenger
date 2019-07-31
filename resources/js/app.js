@@ -3,7 +3,10 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-import Vue from 'vue'
+//EventBus Ejemplo
+window.eventBus = new Vue();
+
+//import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 
 Vue.use(BootstrapVue)

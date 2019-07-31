@@ -30,6 +30,9 @@
                 //Emite este método para que lo detecte el componente padre
                 this.selectedConversationId = conversation.id;
                 this.$emit('conversationSelected', conversation);
+
+                //EventBus Ejemplo, emitir evento y pasar data
+                eventBus.$emit('example', conversation);
             }
         }
     }
